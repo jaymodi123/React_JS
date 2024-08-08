@@ -1,0 +1,910 @@
+Assignment Module-2
+
+• Calculate subtotal price of quantity show in below image.
+
+-> index.js
+
+function  calculatesubtotal() {
+    var n1 = document.getElementById("on").value
+    var n2  = 29.99
+    var total = Number(n1)*Number(n2)
+    document.getElementById("total").innerHTML=total
+}
+
+function on()
+{
+    var one = document.getElementById("on")
+}
+
+
+function calculatesubtotal1() {
+    var m1 = document.getElementById("two").value
+    var m2 = 12.99
+    var result  = Number(m1)*Number(m2)
+    document.getElementById("result1").innerHTML = result
+}
+
+function two() 
+{
+    var two = document.getElementById("two")
+}
+
+
+ * Create below form and do apply validation show in below image
+
+-> import React, { useState } from 'react';
+
+const FormValidation = () => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    password: '',
+    birthDate: '',
+    gender: '',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const validate = () => {
+    let tempErrors = {};
+    let isValid = true;
+
+    if (!formData.fullName.trim()) {
+      tempErrors.fullName = "Full Name is required";
+      isValid = false;
+    }
+
+    if (!formData.email) {
+      tempErrors.email = "Email is required";
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      tempErrors.email = "Email is invalid";
+      isValid = false;
+    }
+
+    if (!formData.password) {
+      tempErrors.password = "Password is required";
+      isValid = false;
+    } else if (formData.password.length < 6) {
+      tempErrors.password = "Password must be at least 6 characters";
+      isValid = false;
+    }
+
+    if (!formData.birthDate) {
+      tempErrors.birthDate = "Birth Date is required";
+      isValid = false;
+    }
+
+    if (!formData.gender) {
+      tempErrors.gender = "Gender is required";
+      isValid = false;
+    }
+
+    setErrors(tempErrors);
+    return isValid;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      console.log("Form submitted successfully:", formData);
+    } else {
+      console.log("Form has errors");
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <div>
+        <label>Full Name:</label>
+        <input
+          type="text"
+          name="fullName"
+          value={formData.fullName}
+          onChange={handleChange}
+        />
+        {errors.fullName && <p style={{ color: 'red' }}>{errors.fullName}</p>}
+      </div>
+
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+        />
+        {errors.email && <p style={{ color: 'red' }}>{errors.email}</p>}
+      </div>
+
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          name="password"
+          value={formData.password}
+          onChange={handleChange}
+        />
+        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
+      </div>
+
+      <div>
+        <label>Birth Date:</label>
+        <input
+          type="date"
+          name="birthDate"
+          value={formData.birthDate}
+          onChange={handleChange}
+        />
+        {errors.birthDate && <p style={{ color: 'red' }}>{errors.birthDate}</p>}
+      </div>
+
+      <div>
+        <label>Gender:</label>
+        <select
+          name="gender"
+          value={formData.gender}
+          onChange={handleChange}
+        >
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+        {errors.gender && <p style={{ color: 'red' }}>{errors.gender}</p>}
+      </div>
+
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  );
+};
+
+export default FormValidation;
+
+
+* Create two containers and drag from one to another show in below image
+
+-> container.js
+
+import React from 'react';
+import { useDrop } from 'react-dnd';
+import DraggableItem from './DraggableItem';
+
+const Container = ({ items, onDrop, name }) => {
+  const [{ isOver }, drop] = useDrop({
+    accept: 'ITEM',
+    drop: (item) => onDrop(item, name),
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
+
+  return (
+    <div
+      ref={drop}
+      style={{
+        backgroundColor: isOver ? 'lightgreen' : 'lightgray',
+        padding: '16px',
+        width: '200px',
+        minHeight: '200px',
+        margin: '16px',
+      }}
+    >
+      <h3>{name}</h3>
+      {items.map((item, index) => (
+        <DraggableItem key={index} item={item} />
+      ))}
+    </div>
+  );
+};
+
+export default Container;
+
+->DraggableItem.js
+
+import React from 'react';
+import { useDrag } from 'react-dnd';
+
+const DraggableItem = ({ item }) => {
+  const [{ isDragging }, drag] = useDrag({
+    type: 'ITEM',
+    item: { name: item },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  });
+
+  return (
+    <div
+      ref={drag}
+      style={{
+        padding: '8px',
+        margin: '4px',
+        backgroundColor: isDragging ? 'lightcoral' : 'white',
+        cursor: 'move',
+        border: '1px solid black',
+      }}
+    >
+      {item}
+    </div>
+  );
+};
+
+export default DraggableItem;
+
+->App.js
+
+import React, { useState } from 'react';
+import Container from './Container';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
+function App() {
+  const [container1, setContainer1] = useState(['Item 1', 'Item 2', 'Item 3']);
+  const [container2, setContainer2] = useState([]);
+
+  const handleDrop = (item, containerName) => {
+    if (containerName === 'Container 1') {
+      setContainer1((prev) => [...prev, item.name]);
+      setContainer2((prev) => prev.filter((i) => i !== item.name));
+    } else if (containerName === 'Container 2') {
+      setContainer2((prev) => [...prev, item.name]);
+      setContainer1((prev) => prev.filter((i) => i !== item.name));
+    }
+  };
+
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <Container
+          name="Container 1"
+          items={container1}
+          onDrop={handleDrop}
+        />
+        <Container
+          name="Container 2"
+          items={container2}
+          onDrop={handleDrop}
+        />
+      </div>
+    </DndProvider>
+  );
+}
+
+export default App;
+
+
+* Createt Email validation program show in below image
+
+-> import React, { useState } from 'react';
+import './App.css';
+
+function App() {
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
+
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateEmail(email)) {
+      setError('');
+      alert('Email is valid!');
+    } else {
+      setError('Email is invalid');
+    }
+  };
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Email Validation</h1>
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Email:</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ marginLeft: '10px' }}
+            />
+          </div>
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <button type="submit" style={{ marginTop: '10px' }}>Submit</button>
+        </form>
+      </header>
+    </div>
+  );
+}
+
+export default App;
+
+* Create Show and Hide password program show in below image.
+
+-> import React, { useState } from 'react';
+import './App.css';
+
+function App() {
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Show/Hide Password</h1>
+        <form>
+          <div>
+            <label>Password:</label>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={{ marginLeft: '10px' }}
+            />
+            <button type="button" onClick={toggleShowPassword} style={{ marginLeft: '10px' }}>
+              {showPassword ? 'Hide' : 'Show'}
+            </button>
+          </div>
+        </form>
+      </header>
+    </div>
+  );
+}
+
+export default App;
+
+* Create Password Strength checker show in below image.
+-> import React, { useState } from 'react';
+import './App.css';
+
+function App() {
+  const [password, setPassword] = useState('');
+  const [strength, setStrength] = useState('');
+
+  const evaluatePasswordStrength = (password) => {
+    let strength = '';
+    if (password.length < 6) {
+      strength = 'Too short';
+    } else if (/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#$%^&*]).{6,}$/.test(password)) {
+      strength = 'Strong';
+    } else if (/^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}$/.test(password)) {
+      strength = 'Medium';
+    } else {
+      strength = 'Weak';
+    }
+    return strength;
+  };
+
+  const handleChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setStrength(evaluatePasswordStrength(newPassword));
+  };
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Password Strength Checker</h1>
+        <form>
+          <div>
+            <label>Password:</label>
+            <input
+              type="password"
+              value={password}
+              onChange={handleChange}
+              style={{ marginLeft: '10px' }}
+            />
+          </div>
+          <div style={{ marginTop: '10px' }}>
+            <p>Password strength: <strong>{strength}</strong></p>
+          </div>
+        </form>
+      </header>
+    </div>
+  );
+}
+
+export default App;
+
+* Create program to generate Random quote show in below image
+->import React, { useState } from 'react';
+
+const quotes = [
+  "The only way to do great work is to love what you do. – Steve Jobs",
+  "Life is what happens when you're busy making other plans. – John Lennon",
+  "The purpose of our lives is to be happy. – Dalai Lama",
+  "Get busy living or get busy dying. – Stephen King",
+  "You have within you right now, everything you need to deal with whatever the world can throw at you. – Brian Tracy"
+];
+
+function RandomQuoteGenerator() {
+  const [quote, setQuote] = useState(quotes[0]);
+
+  const generateRandomQuote = () => {
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    setQuote(quotes[randomIndex]);
+  };
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h1>Random Quote Generator</h1>
+      <p>{quote}</p>
+      <button onClick={generateRandomQuote}>Generate New Quote</button>
+    </div>
+  );
+}
+
+export default RandomQuoteGenerator;
+
+* Create program to Export html table to excel show in below image.
+->
+import React from 'react';
+import * as XLSX from 'xlsx';
+
+const ExportToExcel = () => {
+  const tableRef = React.useRef();
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.table_to_sheet(tableRef.current);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, 'table-data.xlsx');
+  };
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h1>Export HTML Table to Excel</h1>
+      <table ref={tableRef} border="1" style={{ margin: 'auto', borderCollapse: 'collapse' }}>
+        <thead>
+          <tr>
+            <th>Header 1</th>
+            <th>Header 2</th>
+            <th>Header 3</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Data 1</td>
+            <td>Data 2</td>
+            <td>Data 3</td>
+          </tr>
+          <tr>
+            <td>Data 4</td>
+            <td>Data 5</td>
+            <td>Data 6</td>
+          </tr>
+        </tbody>
+      </table>
+      <button onClick={exportToExcel} style={{ marginTop: '20px' }}>
+        Export to Excel
+      </button>
+    </div>
+  );
+};
+
+export default ExportToExcel;
+
+* Create Currency converter show in below image.
+-> import React, { useState } from 'react';
+
+const CurrencyConverter = () => {
+  // Conversion rate from USD to EUR
+  const conversionRate = 0.85; // Example rate: 1 USD = 0.85 EUR
+
+  const [amountUSD, setAmountUSD] = useState('');
+  const [amountEUR, setAmountEUR] = useState('');
+
+  const handleAmountUSDChange = (e) => {
+    const usd = e.target.value;
+    setAmountUSD(usd);
+    setAmountEUR((usd * conversionRate).toFixed(2));
+  };
+
+  const handleAmountEURChange = (e) => {
+    const eur = e.target.value;
+    setAmountEUR(eur);
+    setAmountUSD((eur / conversionRate).toFixed(2));
+  };
+
+  return (
+    <div style={{ textAlign: 'center', marginTop: '50px' }}>
+      <h1>Currency Converter</h1>
+      <div>
+        <label>
+          USD:
+          <input
+            type="number"
+            value={amountUSD}
+            onChange={handleAmountUSDChange}
+            placeholder="Enter amount in USD"
+            step="0.01"
+          />
+        </label>
+        <br />
+        <label>
+          EUR:
+          <input
+            type="number"
+            value={amountEUR}
+            onChange={handleAmountEURChange}
+            placeholder="Enter amount in EUR"
+            step="0.01"
+          />
+        </label>
+      </div>
+    </div>
+  );
+};
+
+export default CurrencyConverter;
+
+
+
+* Achieve Throttling using below example (on mouse over display mouse
+cordinates.)
+
+import React, { useState, useCallback } from 'react';
+
+// Throttle function
+const throttle = (func, limit) => {
+  let lastFunc;
+  let lastRan;
+  return function(...args) {
+    const context = this;
+    if (!lastRan) {
+      func.apply(context, args);
+      lastRan = Date.now();
+    } else {
+      clearTimeout(lastFunc);
+      lastFunc = setTimeout(() => {
+        if ((Date.now() - lastRan) >= limit) {
+          func.apply(context, args);
+          lastRan = Date.now();
+        }
+      }, limit - (Date.now() - lastRan));
+    }
+  };
+};
+
+const MouseTracker = () => {
+  const [coords, setCoords] = useState({ x: 0, y: 0 });
+
+  // Throttled mouse move handler
+  const handleMouseMove = useCallback(
+    throttle((event) => {
+      setCoords({ x: event.clientX, y: event.clientY });
+    }, 100), // Throttle limit (e.g., 100ms)
+    []
+  );
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      style={{ width: '100vw', height: '100vh', border: '1px solid black' }}
+    >
+      <p>Mouse Coordinates:</p>
+      <p>X: {coords.x}</p>
+      <p>Y: {coords.y}</p>
+    </div>
+  );
+};
+
+export default MouseTracker;
+
+
+
+* Create Simple Alarm Clock show in below image
+
+import React, { useState, useEffect } from 'react';
+
+const AlarmClock = () => {
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [alarmTime, setAlarmTime] = useState('');
+  const [alarmMessage, setAlarmMessage] = useState('');
+
+  // Update current time every second
+  useEffect(() => {
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Check for alarm match
+  useEffect(() => {
+    if (alarmTime) {
+      const [hours, minutes] = alarmTime.split(':').map(Number);
+      if (currentTime.getHours() === hours && currentTime.getMinutes() === minutes) {
+        setAlarmMessage('Alarm ringing!');
+        setAlarmTime(''); // Clear alarm after ringing
+      }
+    }
+  }, [currentTime, alarmTime]);
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h1>Alarm Clock</h1>
+      <div>
+        <p>Current Time: {currentTime.toLocaleTimeString()}</p>
+      </div>
+      <div>
+        <input
+          type="time"
+          value={alarmTime}
+          onChange={(e) => setAlarmTime(e.target.value)}
+        />
+        <button onClick={() => setAlarmMessage('')}>Set Alarm</button>
+      </div>
+      {alarmMessage && <p style={{ color: 'red' }}>{alarmMessage}</p>}
+    </div>
+  );
+};
+
+export default AlarmClock;
+
+
+
+*  Create Responsive Light box Gallery shown in below image
+
+
+import React, { useState } from 'react';
+import './LightboxGallery.css';
+
+const LightboxGallery = () => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const images = [
+    'https://via.placeholder.com/600x400?text=Image+1',
+    'https://via.placeholder.com/600x400?text=Image+2',
+    'https://via.placeholder.com/600x400?text=Image+3'
+  ];
+
+  return (
+    <div>
+      <div className="gallery">
+        {images.map((img, index) => (
+          <img
+            key={index}
+            src={img}
+            alt={`Gallery ${index}`}
+            className="gallery-item"
+            onClick={() => setSelectedImage(img)}
+          />
+        ))}
+      </div>
+
+      {selectedImage && (
+        <div className="lightbox" onClick={() => setSelectedImage(null)}>
+          <img src={selectedImage} alt="Selected" className="lightbox-image" />
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default LightboxGallery;
+
+
+*  Create review Card slider shown in below image
+
+import React, { useState } from 'react';
+import './ReviewCardSlider.css';
+
+const reviews = [
+  { id: 1, name: 'Alice Johnson', review: 'Amazing service!', rating: 5 },
+  { id: 2, name: 'Bob Smith', review: 'Great experience.', rating: 4 },
+  { id: 3, name: 'Charlie Brown', review: 'Very satisfied.', rating: 5 },
+];
+
+const ReviewCardSlider = () => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % reviews.length);
+  const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
+
+  return (
+    <div className="slider">
+      <button className="slider-btn prev" onClick={prevSlide}>❮</button>
+      <div className="slider-content">
+        {reviews.map((review, index) => (
+          <div key={review.id} className={`card ${index === currentIndex ? 'active' : ''}`}>
+            <h3>{review.name}</h3>
+            <p>{review.review}</p>
+            <p>Rating: {review.rating} ★</p>
+          </div>
+        ))}
+      </div>
+      <button className="slider-btn next" onClick={nextSlide}>❯</button>
+    </div>
+  );
+};
+
+export default ReviewCardSlider;
+
+
+* Create Login Logout system shown below
+
+import React, { useState } from 'react';
+
+const App = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => setIsLoggedIn(true);
+  const handleLogout = () => setIsLoggedIn(false);
+
+  return (
+    <div className="app">
+      {isLoggedIn ? (
+        <div>
+          <h2>Welcome, User!</h2>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      ) : (
+        <div>
+          <h2>Login</h2>
+          <button onClick={handleLogin}>Login</button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
+
+
+*  Create Image Editor shown below and apply filters like
+brightness,contrast etc.
+
+
+import React, { useState } from 'react';
+import './ImageEditor.css';
+
+const ImageEditor = () => {
+  const [brightness, setBrightness] = useState(100);
+  const [contrast, setContrast] = useState(100);
+
+  return (
+    <div className="editor">
+      <h1>Image Editor</h1>
+      
+      <input
+        type="range"
+        min="0"
+        max="200"
+        value={brightness}
+        onChange={(e) => setBrightness(e.target.value)}
+        className="slider"
+      />
+      <label>Brightness: {brightness}%</label>
+      
+      <input
+        type="range"
+        min="0"
+        max="200"
+        value={contrast}
+        onChange={(e) => setContrast(e.target.value)}
+        className="slider"
+      />
+      <label>Contrast: {contrast}%</label>
+      
+      <div
+        className="image-container"
+        style={{ filter: `brightness(${brightness}%) contrast(${contrast}%)` }}
+      >
+        <img src="https://via.placeholder.com/600x400" alt="Sample" />
+      </div>
+    </div>
+  );
+};
+
+export default ImageEditor;
+
+
+
+*  Perform Localstorage CRUD as below
+
+
+import React, { useState, useEffect } from 'react';
+import './TodoApp.css';
+
+const TodoApp = () => {
+  const [todos, setTodos] = useState([]);
+  const [newTodo, setNewTodo] = useState('');
+  const [editIndex, setEditIndex] = useState(null);
+  const [editText, setEditText] = useState('');
+
+  useEffect(() => {
+    // Load todos from localStorage when the component mounts
+    const savedTodos = JSON.parse(localStorage.getItem('todos')) || [];
+    setTodos(savedTodos);
+  }, []);
+
+  useEffect(() => {
+    // Save todos to localStorage whenever they change
+    localStorage.setItem('todos', JSON.stringify(todos));
+  }, [todos]);
+
+  const handleAddTodo = () => {
+    if (newTodo.trim() === '') return;
+    setTodos([...todos, { text: newTodo, id: Date.now() }]);
+    setNewTodo('');
+  };
+
+  const handleEditTodo = (index) => {
+    setEditIndex(index);
+    setEditText(todos[index].text);
+  };
+
+  const handleUpdateTodo = () => {
+    if (editText.trim() === '') return;
+    const updatedTodos = todos.map((todo, index) =>
+      index === editIndex ? { ...todo, text: editText } : todo
+    );
+    setTodos(updatedTodos);
+    setEditIndex(null);
+    setEditText('');
+  };
+
+  const handleDeleteTodo = (index) => {
+    const updatedTodos = todos.filter((_, i) => i !== index);
+    setTodos(updatedTodos);
+  };
+
+  return (
+    <div className="todo-app">
+      <h1>Todo List</h1>
+      
+      <div className="input-group">
+        <input
+          type="text"
+          value={newTodo}
+          onChange={(e) => setNewTodo(e.target.value)}
+          placeholder="Add a new todo"
+        />
+        <button onClick={handleAddTodo}>Add</button>
+      </div>
+
+      <ul>
+        {todos.map((todo, index) => (
+          <li key={todo.id}>
+            {editIndex === index ? (
+              <div>
+                <input
+                  type="text"
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
+                <button onClick={handleUpdateTodo}>Update</button>
+              </div>
+            ) : (
+              <div>
+                <span>{todo.text}</span>
+                <button onClick={() => handleEditTodo(index)}>Edit</button>
+                <button onClick={() => handleDeleteTodo(index)}>Delete</button>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default TodoApp;
+
+
+
