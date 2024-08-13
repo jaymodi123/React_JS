@@ -1,0 +1,79 @@
+module-4
+_______
+
+• Create counter app program shown below.
+
+-> import React, { useState } from 'react';
+import './App.css';
+
+function App() {
+  const [count, setCount] = useState(0);
+  const increment = () => {
+    setCount(count + 1);
+  };
+  const decrement = () => {
+    setCount(count - 1);
+  };
+
+  return (
+    <div className="App">
+      <h1>Counter App</h1>
+      <p>Current Count: {count}</p>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+    </div>
+  );
+}
+
+export default App;
+
+• Create Login Lout React program as below.
+
+-> import React, { useState } from 'react';
+import './App.css';
+
+function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
+  return (
+    <div className="App">
+      <h1>{isLoggedIn ? "Welcome Back!" : "Please Log In"}</h1>
+      {isLoggedIn ? (
+        <button onClick={handleLogout}>Logout</button>
+      ) : (
+        <button onClick={handleLogin}>Login</button>
+      )}
+    </div>
+  );
+}
+
+export default App;
+
+css:-
+
+.App {
+  text-align: center;
+  margin-top: 50px;
+}
+
+button {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+}
+
+
+
+
