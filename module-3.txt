@@ -1,0 +1,31 @@
+Module-3
+
+• Create Hello World React program show below
+
+App.js
+_____
+import React from 'react';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App" ClassName="Myclass">
+      <h1>Hello World!</h1>
+    </div>
+  );
+}
+
+export default App;
+
+
+App.css
+______
+.Myclass {
+    background-color: cyan; 
+    padding: 20px; 
+    width: 50%;
+    text-align: center;
+    border-radius: 8px;
+}
+
+
