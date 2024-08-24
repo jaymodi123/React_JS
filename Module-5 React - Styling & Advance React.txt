@@ -1,0 +1,314 @@
+Module 5.1 React - Styling & Advance React
+------------------------------------------------------
+
+App.js
+--------
+import React from 'react';
+import Header from './components/Header';
+import Banner from './components/Banner';
+import ProductSection from './components/ProductSection';
+import Footer from './components/Footer';
+
+function App() {
+  return (
+    <div>
+      <Header />
+      <Banner />
+      <ProductSection />
+      <Footer />
+    </div>
+  );
+}
+
+export default App;
+
+
+Header.js
+-----------
+import React from 'react';
+const Header = () => {
+  return (
+    <>
+      <div>
+        <img src={'/src/Mart'} alt="My Image" />
+        <nav class="navbar bg-body-tertiary">
+          <div class="container-fluid">
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search for products.." aria-label="Search"/>
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            <button class="shadow-button">Become Vendor ➡️</button>
+
+          </div>
+          
+        </nav>
+        
+      </div>
+      <div>
+
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+
+          <div class="container-fluid">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" style={{ backgroundColor: "#2ca84d", marginRight: "35px" }} type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Browse All Categories
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+              </ul>
+            </div>
+            <a class="navbar-brand" href="#">Home</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+              <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#">About</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" style={{ color: 'black' }} href="#">Shop</a>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" style={{ color: 'black' }} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Vendors
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" style={{ color: 'black' }} href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Mega Menu
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Action</a></li>
+                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                  </ul>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link disabled" style={{ color: 'black' }} aria-disabled="true">Blogs</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link disabled" style={{ color: 'black' }} aria-disabled="true">Contact</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+
+      <header style={headerStyle}>
+        <h1>Nest Grocery</h1>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/shop">Shop</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </header>
+    </>
+  );
+};
+
+const headerStyle = {
+  padding: '20px',
+  backgroundColor: '#4CAF50',
+  color: 'white',
+  textAlign: 'center',
+};
+
+export default Header;
+
+
+Banner.js
+-----------
+import React from 'react';
+import nestmart from '../nestmart.png'
+
+const Banner = () => {
+  return (
+    <>
+    <div>
+    <div class="carousel-item active">
+      <img src={nestmart} height={'600px'} class="d-block w-100" alt="..."/>
+    </div>
+    </div><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    <section style={bannerStyle}>
+      <h2>Welcome to Nest Grocery</h2>
+      <p>Fresh groceries delivered to your doorstep</p>
+    </section>
+     <h2>Featured Categories</h2>
+     </>
+  );
+};
+
+const bannerStyle = {
+  height: '300px',
+  background: 'url(/path-to-banner-image.jpg) no-repeat center center/cover',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  color: 'white',
+  textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)',
+  fontSize: '2rem',
+  flexDirection: 'column',
+};
+
+export default Banner;
+
+
+ProductSection.js
+---------------------
+
+import React from 'react';
+
+const ProductSection = () => {
+  const products = [
+    { id: 1, name: 'Fresh Apples', price: '$3.99/lb' },
+    { id: 2, name: 'Bananas', price: '$1.29/lb' },
+    { id: 3, name: 'mangoes', price: '$2.50/ea' },
+  ];
+
+  return (
+    <>
+      <section style={productStyle}>
+        <div style={productGridStyle}>
+          {products.map((product) => (
+            <div key={product.id} style={productCardStyle}>
+              <h3>{product.name}</h3>
+              <p>{product.price}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+};
+
+const productStyle = {
+  padding: '20px',
+  textAlign: 'center',
+};
+
+const productGridStyle = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(3, 1fr)',
+  gap: '20px',
+};
+
+const productCardStyle = {
+  border: '1px solid #ddd',
+  padding: '20px',
+  borderRadius: '8px',
+};
+
+export default ProductSection;
+
+
+Footer.js
+----------
+
+import React from 'react';
+
+const Footer = () => {
+  return (
+    <footer style={footerStyle}>
+      <p>&copy; 2024 Nest Grocery</p>
+      <nav>
+        <a href="/">Privacy Policy</a> | <a href="/">Terms of Service</a>
+      </nav>
+    </footer>
+  );
+};
+
+const footerStyle = {
+  padding: '20px',
+  backgroundColor: '#4CAF50',
+  color: 'white',
+  textAlign: 'center',
+  marginTop: '20px',
+};
+
+export default Footer;
+
+
+
+
+
+
+
+Module 5.2 React CRUD & UI Material
+-------------------------------------------------
+
+App.js
+--------
+
+import React from 'react';
+import { AppBar, Toolbar, InputBase, Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Search, Edit, Delete } from '@mui/icons-material';
+
+const data = [
+  { name: 'React JS', description: 'This is simple UI Library' },
+  { name: 'Node JS', description: 'It is backend JS Framework' },
+  { name: 'Angular', description: 'This is Frontend JS Framework' },
+  { name: 'Vue JS', description: 'Another Framework for JS' },
+];
+
+const App = () => {
+  return (
+    <div style={{ textAlign: 'center' }}>
+      {/* Header with Search */}
+      <AppBar position="static">
+        <Toolbar>
+          <InputBase
+            placeholder="Search..."
+            startAdornment={<Search style={{ marginRight: 8 }} />}
+            style={{ backgroundColor: '#fff', padding: '0 10px', borderRadius: 4, flex: 1 }}
+          />
+        </Toolbar>
+      </AppBar>
+
+      {/* Add Blog Button */}
+      <Button variant="contained" color="primary" style={{ margin: '20px 0' }}>
+        ADD BLOG
+      </Button>
+
+      {/* Data Table */}
+      <TableContainer component={Paper} style={{ maxWidth: 600, margin: 'auto' }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Technology</TableCell>
+              <TableCell>Description</TableCell>
+              <TableCell align="right">Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{row.name}</TableCell>
+                <TableCell>{row.description}</TableCell>
+                <TableCell align="right">
+                  <IconButton color="primary">
+                    <Edit />
+                  </IconButton>
+                  <IconButton color="secondary">
+                    <Delete />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  );
+};
+
+export default App;
